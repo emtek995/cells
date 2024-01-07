@@ -12,5 +12,9 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(SDL)
 
-add_executable(game main.cpp)
+include_directories(src/include)
+
+add_executable(game
+  main.cpp
+  src/render.cpp)
 target_link_libraries(game PRIVATE SDL3::SDL3)
