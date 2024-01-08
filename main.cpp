@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <format>
 #include <sys/mman.h>
 
 #include <SDL3/SDL.h>
@@ -33,7 +34,16 @@ int main(int, char **) {
 
   bool done = false;
   SDL_Event event;
+  Uint64 start_time = SDL_GetPerformanceCounter();
+  Uint64 end_time{};
+  double delta_time{};
+  auto timer_frequecy = SDL_GetPerformanceFrequency();
+
   while (!done) {
+    end_time = start_time;
+    start_time = SDL_GetPerformanceCounter();
+    delta_time = double(start_time - end_time) / timer_frequecy;
+
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT) {
         done = true;
@@ -47,6 +57,10 @@ int main(int, char **) {
     SDL_UpdateTexture(texture, nullptr, buffer, window_width * bytes_per_pixel);
     SDL_RenderTexture(renderer, texture, nullptr, nullptr);
     SDL_RenderPresent(renderer);
+
+    auto title = std::format("Frame time: {:03.4f}ms FPS: {:03.4f}", delta_time, (60.0 - delta_time));
+    SDL_SetWindowTitle(window, title.c_str());
+    SDL_Delay(1000.0 / (60.0 - delta_time));
   }
 
   munmap(buffer, buffer_size);
