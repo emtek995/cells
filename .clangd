@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-isystem/home/eddie/.local/include, -isystem/home/eddie/.local/include/c++/v1, -isystem/home/eddie/.local/lib/clang/18/include]
