@@ -4,6 +4,7 @@
 #include <sys/mman.h>
 
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_mouse.h>
 
 #include <cellmap.hpp>
 #include <render.hpp>
@@ -46,9 +47,6 @@ int main(int, char **) {
   double delta_time{};
   auto timer_frequecy = SDL_GetPerformanceFrequency();
 
-  setup();
-
-
   CellMap current_map(cellmap_height, cellmap_width);
   current_map.init();
   int generation{};
@@ -67,6 +65,15 @@ int main(int, char **) {
       }
     }
 
+    float x{};
+    float y{};
+    int state = SDL_GetMouseState(&x, &y);
+    x /= 4;
+    y /= 4;
+
+    if (state)
+      current_map.set_cell(x, y);
+
     generation++;
     current_map.next_generation(&buffer);
 
@@ -74,7 +81,7 @@ int main(int, char **) {
     SDL_RenderTexture(renderer, texture, nullptr, nullptr);
     SDL_RenderPresent(renderer);
 
-    auto title = std::format("Gen: {} - Frame time: {:06.2f}μs - FPS: {:06.2f}", generation, delta_time * 1000, (60.0 - delta_time));
+    auto title = std::format("Gen: {} - Frame time: {:06.2f}μs - FPS: {:06.2f} - {}, {}", generation, delta_time * 1000, (60.0 - delta_time), x, y);
     SDL_SetWindowTitle(window, title.c_str());
     SDL_Delay(1000.0 / (60.0 - delta_time));
   }

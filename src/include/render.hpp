@@ -19,6 +19,5 @@ struct Size {
   unsigned height;
 };
 
-auto setup() -> void;
 auto game_render(Buffer *buffer) -> void;
 auto draw_pixel(const Buffer *buffer, const int scale, const uint32_t color, const int x, const int y) -> void;

@@ -5,21 +5,6 @@
 #include <render.hpp>
 #include <utility>
 
-struct Material {
-  uint32_t color;
-};
-
-Material world[10][10]{};
-
-auto setup() -> void {
-  for (auto col = 0; col < 10; ++col) {
-    for (auto row = 0; row < 10; ++row) {
-      world[row][col] = Material{.color = 0xA0522DFF};
-    }
-  }
-  world[3][3] = Material{.color = 0xFFFFFFFF};
-}
-
 static inline auto draw_pixel(const Buffer *buffer, const uint32_t color, const Vertex &point) -> void {
   if (point.x >= buffer->width || point.y >= buffer->height) return;
   buffer->pixels[point.y * buffer->width + point.x] = color;
